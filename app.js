@@ -1,10 +1,23 @@
 
-const serverKey = ''; // non-empty key requires tg-proxy-key in header
-
 const express = require('express')
 const path = require('path')
 const fetch = require('cross-fetch')
 const app = express()
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+
+// Define CLI options using yargs
+const argv = yargs(hideBin(process.argv))
+  .option('key', {
+    alias: 'k',
+    description: 'Specify the server key to check all requests by tg-proxy-key header, empty means to not use authentification',
+    type: 'string',
+    default: '',
+  })
+  .help()
+  .alias('help', 'h')
+  .argv;
+
 var multer = require('multer');
 var forms = multer({limits: { fieldSize: 10*1024*1024 }});
 app.use(forms.array()); 
@@ -15,9 +28,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.all(`/bot*`, async (req, res) => {
 
-  if ( serverKey ) {
+  if ( argv.key ) {
     const apiKey = req.header('tg-proxy-key');
-    if (!apiKey || apiKey !== serverKey) {
+    if (!apiKey || apiKey !== argv.key) {
       return res.status(403).json({ error: 'Unauthorized: Invalid API Key, add api key as tg-proxy-key in header' });
     }
   }
