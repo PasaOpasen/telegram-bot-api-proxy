@@ -1,5 +1,5 @@
 
-const serverKey = 'my'; // non-empty key requires tg-proxy-key in header
+const serverKey = ''; // non-empty key requires tg-proxy-key in header
 
 const express = require('express')
 const path = require('path')

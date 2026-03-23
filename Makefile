@@ -1,4 +1,6 @@
 
+TIME:=$(shell date +"%Y-%m-%d_%H-%M")
+
 build:
 	docker build -t telegram-bot-api-proxy  .
 
@@ -10,5 +12,13 @@ down:
 
 logs:
 	docker logs telegram-bot-api-proxy
+
+push:
+	docker tag telegram-bot-api-proxy:latest pasaopasen/telegram-bot-api-proxy:$(TIME)
+	docker push pasaopasen/telegram-bot-api-proxy:$(TIME)
+	docker tag telegram-bot-api-proxy:latest pasaopasen/telegram-bot-api-proxy:latest
+	docker push pasaopasen/telegram-bot-api-proxy:latest
+	
+
 
 
