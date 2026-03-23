@@ -1,5 +1,3 @@
-// telegram bot token
-const bot_token = '1234567890:ABCDEFabcdef1234567890abcdef1234567890'; 
 
 const express = require('express')
 const path = require('path')
@@ -13,9 +11,7 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json({limit : '50mb' }));  
 app.use(bodyParser.urlencoded({ extended: true }));
 
-console.log(`/bot${bot_token}/*`)
-
-app.all(`/bot${bot_token}/*`, async (req, res) => {
+app.all(`/bot*`, async (req, res) => {
   const url = `https://api.telegram.org${req.url}`;
   const options = {
       method: req.method,
@@ -39,3 +35,5 @@ app.use(function(err, req, res, next) {
 app.listen(9000, () => {
   console.log(`Server start on http://localhost:9000`);
 })
+
+
