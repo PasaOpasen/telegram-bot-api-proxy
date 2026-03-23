@@ -8,4 +8,7 @@ up:
 down:
 	docker stop telegram-bot-api-proxy
 
+logs:
+	docker logs telegram-bot-api-proxy
+
 
