@@ -5,6 +5,7 @@ const fetch = require('cross-fetch')
 const app = express()
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
+var morgan = require('morgan')
 
 // Define CLI options using yargs
 const argv = yargs(hideBin(process.argv))
@@ -23,8 +24,10 @@ var forms = multer({limits: { fieldSize: 10*1024*1024 }});
 app.use(forms.array()); 
 
 const bodyParser = require('body-parser')
-app.use(bodyParser.json({limit : '50mb' }));  
+app.use(bodyParser.json({limit : '150mb' }));  
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(morgan('combined'))
 
 app.all(`/bot*`, async (req, res) => {
 
