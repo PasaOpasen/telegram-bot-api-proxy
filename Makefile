@@ -13,6 +13,13 @@ down:
 logs:
 	docker logs telegram-bot-api-proxy
 
+logs-follow:
+	docker logs -f telegram-bot-api-proxy
+
+redo:
+	make down || true
+	make build up logs-follow
+
 push:
 	docker tag telegram-bot-api-proxy:latest pasaopasen/telegram-bot-api-proxy:$(TIME)
 	docker push pasaopasen/telegram-bot-api-proxy:$(TIME)
