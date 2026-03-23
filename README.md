@@ -3,7 +3,6 @@ simple express app for forwarding request to api.telegram.org
 
 ## How to use
 
-1. open `app.js` set `bot_token` to your bot token
 1. yarn install && node app.js
 
 ## Endpoint
