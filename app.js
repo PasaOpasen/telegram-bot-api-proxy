@@ -1,4 +1,6 @@
 
+const serverKey = 'my'; // non-empty key requires tg-proxy-key in header
+
 const express = require('express')
 const path = require('path')
 const fetch = require('cross-fetch')
@@ -12,6 +14,14 @@ app.use(bodyParser.json({limit : '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.all(`/bot*`, async (req, res) => {
+
+  if ( serverKey ) {
+    const apiKey = req.header('tg-proxy-key');
+    if (!apiKey || apiKey !== serverKey) {
+      return res.status(403).json({ error: 'Unauthorized: Invalid API Key, add api key as tg-proxy-key in header' });
+    }
+  }
+
   const url = `https://api.telegram.org${req.url}`;
   const options = {
       method: req.method,
