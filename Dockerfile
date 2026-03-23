@@ -3,9 +3,9 @@ FROM node:25 as app
 
 RUN groupadd -r user -g 1444 && \
     useradd -u 1444 -s /bin/bash -g user user && \
-    mkdir -p /app && \
-    chown user:user /app && \
-    chmod u+rw /app
+    mkdir -p /app/cert && \
+    chown user:user -R /app && \
+    chmod u+rw -R /app
 
 WORKDIR /app
 USER user

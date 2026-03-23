@@ -5,7 +5,12 @@ const fetch = require('cross-fetch')
 const app = express()
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
+
+var https = require('https');
+var fs = require('fs');
 var morgan = require('morgan')
+
+var https_options = {};
 
 // Define CLI options using yargs
 const argv = yargs(hideBin(process.argv))
@@ -15,9 +20,38 @@ const argv = yargs(hideBin(process.argv))
     type: 'string',
     default: '',
   })
+  .option('skey', {
+    alias: 'c',
+    description: 'Specify the server key for https',
+    type: 'string',
+    default: '',
+  })
+  .option('cert', {
+    alias: 't',
+    description: 'Specify the server certificate for https',
+    type: 'string',
+    default: '',
+  })
   .help()
   .alias('help', 'h')
   .argv;
+
+
+if (argv.skey || argv.cert ) {
+  if ( argv.skey && argv.cert ) {
+    https = require('https');
+    fs = require('fs');
+
+    https_options = {
+      key: fs.readFileSync(argv.skey),
+      cert: fs.readFileSync(argv.cert)
+    };
+
+  } else {
+    console.error("Both server key and certificate must be defined");
+    process.exit(1);    
+  }
+}
 
 var multer = require('multer');
 var forms = multer({limits: { fieldSize: 10*1024*1024 }});
@@ -51,15 +85,25 @@ app.all(`/bot*`, async (req, res) => {
 
 })
 
-
 // Error handler
 app.use(function(err, req, res, next) {
   console.error(err)
   res.status(500).send('Internal Serverless Error')
 })
 
-app.listen(9000, () => {
-  console.log(`Server start on http://localhost:9000`);
-})
+if (Object.keys(https_options).length === 0) {
+
+  app.listen(9000, () => {
+    console.log(`Server start on http://localhost:9000`);
+  })  
+
+} else {
+
+  https.createServer(https_options, app).listen(9000, () => {
+    console.log(`HTTPS Server running on https://localhost:9000`);
+  });
+
+}
+
 
 
