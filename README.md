@@ -6,7 +6,7 @@ simple express app for forwarding request to api.telegram.org
 ## How to use
 
 ```sh
-$ docker run -it --rm  telegram-bot-api-proxy:latest --help
+$ docker run -it --rm pasaopasen/telegram-bot-api-proxy:latest --help
 Options:
       --version  Show version number                                   [boolean]
   -k, --key      Specify the server key to check all requests by tg-proxy-key
@@ -21,7 +21,7 @@ Options:
 docker run -d -it --rm \
     -p 9000:9000 \
     -v ./cert:/app/cert \
-    --name telegram-bot-api-proxy telegram-bot-api-proxy:latest \
+    --name telegram-bot-api-proxy pasaopasen/telegram-bot-api-proxy:latest \
     --key my-key --skey /app/cert/selfsigned.key --cert /app/cert/selfsigned.crt
 ```
 
