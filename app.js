@@ -85,6 +85,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/', proxy('https://api.telegram.org', {
+  limit: '80mb',
   userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
     delete headers['tg-proxy-key']
     return headers;
