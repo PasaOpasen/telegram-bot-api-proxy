@@ -54,8 +54,8 @@ if (argv.skey || argv.cert ) {
 }
 
 var multer = require('multer');
-var forms = multer({limits: { fieldSize: 10*1024*1024 }});
-app.use(forms.array()); 
+var forms = multer({limits: { fieldSize: 100*1024*1024 }});
+app.use(forms.any()); 
 
 const bodyParser = require('body-parser')
 app.use(bodyParser.json({limit : '150mb' }));  
@@ -75,7 +75,7 @@ app.all(`/bot*`, async (req, res) => {
   const url = `https://api.telegram.org${req.url}`;
   const options = {
       method: req.method,
-      headers: {'content-type': 'application/json; charset=utf-8'},
+      headers: {'content-type': req.headers['content-type']},
   };
   if( req.method.toLocaleLowerCase() === 'post' && req.body ) options.body = JSON.stringify(req.body);
 
